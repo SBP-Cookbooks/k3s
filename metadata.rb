@@ -9,5 +9,9 @@ chef_version     '>= 15.0'
 issues_url 'https://github.com/SBP-Cookbooks/k3s/issues'
 source_url 'https://github.com/SBP-Cookbooks/k3s'
 
+supports 'centos'
+supports 'debian'
+supports 'ubuntu'
+
 depends 'mariadb', '~> 4.1'
 depends 'selinux_policy'
