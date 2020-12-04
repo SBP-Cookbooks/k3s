@@ -22,7 +22,3 @@ suites:
   - name: default
     provisioner:
       policyfile_path: policyfiles/test.rb
-    attributes:
-      k3s:
-        mariadb:
-          ctrl_password: gsql
