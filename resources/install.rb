@@ -19,7 +19,7 @@ provides :k3s_install
 
 property :datastore,             String, equal_to: ['mariadb'], default: 'mariadb'
 property :kubeconfig_mode,       String, default: '0644'
-property :mariadb_ctrl_password, String, sensitive: true, default: lazy { node['k3s']['mariadb']['ctrl_password'] }
+property :mariadb_ctrl_password, String, sensitive: true
 property :mariadb_ctrl_user,     String, default: 'root'
 property :mariadb_database,      String, default: 'k3s'
 property :mariadb_host,          String, default: 'localhost'

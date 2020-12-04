@@ -22,4 +22,6 @@ find_resource(:service, 'mariadb') do
   action [:enable, :start]
 end
 
-k3s_install 'server'
+k3s_install 'server' do
+  mariadb_ctrl_password 'gsql'
+end
