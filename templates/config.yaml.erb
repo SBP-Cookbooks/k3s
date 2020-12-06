@@ -1,0 +1,13 @@
+write-kubeconfig-mode: "<%= @config['write_kubeconfig_mode'] %>"
+<% unless @config['tls_san'].empty? -%>
+tls-san:
+<% @config['tls_san'].each do |option| -%>
+  - "<%= option %>"
+<% end -%>
+<% end -%>
+<% unless @config['node_labels'].empty? -%>
+node-label:
+<% @config['node_labels'].each do |option| -%>
+  - "<%= option %>"
+<% end -%>
+<% end -%>
