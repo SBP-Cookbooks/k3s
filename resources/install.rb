@@ -17,15 +17,13 @@
 
 provides :k3s_install
 
-property :datastore,             String, equal_to: ['mariadb'], default: 'mariadb'
-property :kubeconfig_mode,       String, default: '0644'
-property :mariadb_ctrl_password, String, sensitive: true
-property :mariadb_ctrl_user,     String, default: 'root'
-property :mariadb_database,      String, default: 'k3s'
-property :mariadb_host,          String, default: 'localhost'
-property :mariadb_password,      String, default: 'k3s', sensitive: true
-property :mariadb_user,          String, default: 'k3s'
-property :mode,                  String, name_property: true
+property :datastore,        String, equal_to: ['mariadb'], default: 'mariadb'
+property :kubeconfig_mode,  String, default: '0644'
+property :mariadb_database, String, default: 'k3s'
+property :mariadb_host,     String, default: 'localhost'
+property :mariadb_password, String, default: 'k3s', sensitive: true
+property :mariadb_user,     String, default: 'k3s'
+property :mode,             String, name_property: true
 
 action :create do
   if platform_family?('rhel')
@@ -36,20 +34,6 @@ action :create do
   install_code = "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode #{new_resource.kubeconfig_mode}"
 
   if new_resource.datastore == 'mariadb'
-    mariadb_database 'k3s' do
-      user new_resource.mariadb_ctrl_user
-      password new_resource.mariadb_ctrl_password
-    end
-
-    mariadb_user 'k3s' do
-      ctrl_user new_resource.mariadb_ctrl_user
-      ctrl_password new_resource.mariadb_ctrl_password
-      password new_resource.mariadb_password
-      host 'localhost'
-      database_name 'k3s'
-      action [:create, :grant]
-    end
-
     datastore_endpoint = "--datastore-endpoint='mysql://#{new_resource.mariadb_user}:#{new_resource.mariadb_password}@tcp(#{new_resource.mariadb_host}:3306)/k3s'"
   end
 

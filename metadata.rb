@@ -13,5 +13,4 @@ supports 'centos'
 supports 'debian'
 supports 'ubuntu'
 
-depends 'mariadb', '~> 4.1'
 depends 'selinux_policy'
