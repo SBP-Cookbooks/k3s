@@ -23,8 +23,6 @@ default_action :run
 
 * `datastore` - Cluster Datastore to use, at the moment only `mariadb` is supported. Defaults to `mariadb`.
 * `kubeconfig_mode` - kube config file mode. Defaults to `0644`.
-* `mariadb_ctrl_user` - MariaDB control/admin username (used to create the database and user). Defaults to `root`.
-* `mariadb_ctrl_password` - MariaDB control/admin password (used to create the database and user).
 * `mariadb_database` - MariaDB database to use. Defaults to `k3s`.
 * `mariadb_user` - MariaDB username used by k3s. Defaults to `k3s`.
 * `mariadb_password` - MariaDB password used by k3s. Defaults to `k3s`.
@@ -38,15 +36,13 @@ Minimal usage:
 k3s_install 'server'
 ```
 
-Example with non-default MariaDB instance:
+Using non-default MariaDB settings:
 
 ```ruby
 k3s_install 'server' do
-  mariadb_ctrl_user     'admin'
-  mariadb_ctrl_password 's3cr3t'
-  mariadb_user          'k3s'
-  mariadb_password      'p4ssw0rd'
-  mariadb_host          'db.local'
+  mariadb_user     'k3s'
+  mariadb_password 'p4ssw0rd'
+  mariadb_host     'db.local'
 end
 ```
 
