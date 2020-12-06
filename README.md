@@ -27,6 +27,8 @@ default_action :run
 * `mariadb_user` - MariaDB username used by k3s. Defaults to `k3s`.
 * `mariadb_password` - MariaDB password used by k3s. Defaults to `k3s`.
 * `mariadb_host` - MariaDB host to use. Defaults to `localhost`.
+* `node_labels` - Array of `key=value` pairs to apply as node labels.
+* `tls_san` - TLS SAN(s); can be specified either as an array or string.
 
 #### Examples
 
@@ -43,6 +45,15 @@ k3s_install 'server' do
   mariadb_user     'k3s'
   mariadb_password 'p4ssw0rd'
   mariadb_host     'db.local'
+end
+```
+
+Specifying custom node labels and additional TLS SAN:
+
+```hcl
+k3s_install 'server' do
+  node_labels ['foo=bar', 'something=amazing']
+  tls_san     'k3s.example.com'
 end
 ```
 

@@ -1,9 +1,37 @@
 # InSpec test for recipe test::default
 
+config_content = <<-EOF
+write-kubeconfig-mode: "0644"
+tls-san:
+  - "k3s.example.com"
+node-label:
+  - "foo=bar"
+  - "something=amazing"
+EOF
+
+control 'k3s config' do
+  title ''
+
+  describe file('/etc/rancher/k3s/config.yaml') do
+    it { should exist }
+    its('content') { should eq config_content }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'root' }
+    its('mode') { should cmp '0644' }
+  end
+
+  describe file('/etc/rancher/k3s/k3s.yaml') do
+    it { should exist }
+    its('owner') { should eq 'root' }
+    its('group') { should eq 'root' }
+    its('mode') { should cmp '0644' }
+  end
+end
+
 control 'k3s service' do
   title ''
 
-  describe service 'k3s' do
+  describe service('k3s') do
     it { should be_installed }
     it { should be_enabled }
     it { should be_running }

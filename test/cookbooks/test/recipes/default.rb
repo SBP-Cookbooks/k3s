@@ -35,4 +35,7 @@ mariadb_user 'k3s' do
   action [:create, :grant]
 end
 
-k3s_install 'server'
+k3s_install 'server' do
+  node_labels ['foo=bar', 'something=amazing']
+  tls_san 'k3s.example.com'
+end

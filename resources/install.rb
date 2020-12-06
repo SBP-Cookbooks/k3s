@@ -17,27 +17,46 @@
 
 provides :k3s_install
 
-property :datastore,        String, equal_to: ['mariadb'], default: 'mariadb'
-property :kubeconfig_mode,  String, default: '0644'
-property :mariadb_database, String, default: 'k3s'
-property :mariadb_host,     String, default: 'localhost'
-property :mariadb_password, String, default: 'k3s', sensitive: true
-property :mariadb_user,     String, default: 'k3s'
-property :mode,             String, name_property: true
+property :datastore,        String,           equal_to: ['mariadb'], default: 'mariadb'
+property :kubeconfig_mode,  String,           default: '0644'
+property :mariadb_database, String,           default: 'k3s'
+property :mariadb_host,     String,           default: 'localhost'
+property :mariadb_password, String,           default: 'k3s', sensitive: true
+property :mariadb_user,     String,           default: 'k3s'
+property :mode,             String,           equal_to: ['server'], name_property: true
+property :node_labels,      Array,            default: []
+property :tls_san,          [Array, String],  default: []
 
 action :create do
+  config = {}
+  config['node_labels'] = Array(new_resource.node_labels)
+  config['tls_san'] = Array(new_resource.tls_san)
+  config['write_kubeconfig_mode'] = new_resource.kubeconfig_mode
+
   if platform_family?('rhel')
     include_recipe 'selinux_policy::install'
     package %w(container-selinux selinux-policy-base)
   end
 
-  install_code = "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode #{new_resource.kubeconfig_mode}"
+  install_code = 'curl -sfL https://get.k3s.io | sh -s -'
 
   if new_resource.datastore == 'mariadb'
     datastore_endpoint = "--datastore-endpoint='mysql://#{new_resource.mariadb_user}:#{new_resource.mariadb_password}@tcp(#{new_resource.mariadb_host}:3306)/k3s'"
   end
 
   install_code << " #{datastore_endpoint}"
+
+  directory '/etc/rancher/k3s' do
+    owner 'root'
+    group 'root'
+    recursive true
+  end
+
+  template '/etc/rancher/k3s/config.yaml' do
+    source 'config.yaml.erb'
+    cookbook 'k3s'
+    variables(config: config)
+  end
 
   bash 'Install k3s' do
     code install_code
