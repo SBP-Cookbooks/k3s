@@ -1,6 +1,7 @@
 # InSpec test for recipe test::default
 
 config_content = <<-EOF
+datastore-endpoint: "mysql://k3s:k3s@tcp(localhost:3306)/k3s"
 node-label:
   - "foo=bar"
   - "something=amazing"

@@ -1,3 +1,6 @@
+<% if @config['datastore_endpoint']-%>
+datastore-endpoint: "<%= @config['datastore_endpoint'] %>"
+<% end -%>
 <% unless @config['disable'].empty? -%>
 disable:
 <% @config['disable'].each do |option| -%>

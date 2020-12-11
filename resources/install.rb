@@ -44,13 +44,9 @@ action :create do
     package %w(container-selinux selinux-policy-base)
   end
 
-  install_code = 'curl -sfL https://get.k3s.io | sh -s -'
-
   if new_resource.datastore == 'mariadb'
-    datastore_endpoint = "--datastore-endpoint='mysql://#{new_resource.mariadb_user}:#{new_resource.mariadb_password}@tcp(#{new_resource.mariadb_host}:3306)/k3s'"
+    config['datastore_endpoint'] = "mysql://#{new_resource.mariadb_user}:#{new_resource.mariadb_password}@tcp(#{new_resource.mariadb_host}:3306)/#{new_resource.mariadb_database}"
   end
-
-  install_code << " #{datastore_endpoint}"
 
   directory '/etc/rancher/k3s' do
     owner 'root'
@@ -65,7 +61,7 @@ action :create do
   end
 
   bash 'Install k3s' do
-    code install_code
+    code 'curl -sfL https://get.k3s.io | sh -s -'
     creates '/var/lib/rancher/k3s'
     environment('INSTALL_K3S_BIN_DIR' => '/usr/sbin')
   end
