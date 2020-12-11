@@ -17,19 +17,25 @@
 
 provides :k3s_install
 
-property :datastore,        String,           equal_to: ['mariadb'], default: 'mariadb'
-property :kubeconfig_mode,  String,           default: '0644'
-property :mariadb_database, String,           default: 'k3s'
-property :mariadb_host,     String,           default: 'localhost'
-property :mariadb_password, String,           default: 'k3s', sensitive: true
-property :mariadb_user,     String,           default: 'k3s'
-property :mode,             String,           equal_to: ['server'], name_property: true
-property :node_labels,      Array,            default: []
-property :tls_san,          [Array, String],  default: []
+property :disable,                  Array,           default: []
+property :disable_cloud_controller, [true, false],   default: false
+property :datastore,                String,          equal_to: %w(mariadb), default: 'mariadb'
+property :kubeconfig_mode,          String,          default: '0644'
+property :kubelet_args,             Array,           default: []
+property :mariadb_database,         String,          default: 'k3s'
+property :mariadb_host,             String,          default: 'localhost'
+property :mariadb_password,         String,          default: 'k3s', sensitive: true
+property :mariadb_user,             String,          default: 'k3s'
+property :mode,                     String,          equal_to: %w(server), name_property: true
+property :node_labels,              Array,           default: []
+property :tls_san,                  [Array, String], default: []
 
 action :create do
   config = {}
-  config['node_labels'] = Array(new_resource.node_labels)
+  config['disable'] = new_resource.disable
+  config['disable_cloud_controller'] = new_resource.disable_cloud_controller
+  config['kubelet_args'] = new_resource.kubelet_args
+  config['node_labels'] = new_resource.node_labels
   config['tls_san'] = Array(new_resource.tls_san)
   config['write_kubeconfig_mode'] = new_resource.kubeconfig_mode
 

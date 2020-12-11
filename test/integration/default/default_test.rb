@@ -1,12 +1,12 @@
 # InSpec test for recipe test::default
 
 config_content = <<-EOF
-write-kubeconfig-mode: "0644"
-tls-san:
-  - "k3s.example.com"
 node-label:
   - "foo=bar"
   - "something=amazing"
+tls-san:
+  - "k3s.example.com"
+write-kubeconfig-mode: "0644"
 EOF
 
 control 'k3s config' do
