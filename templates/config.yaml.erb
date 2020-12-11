@@ -1,7 +1,18 @@
-write-kubeconfig-mode: "<%= @config['write_kubeconfig_mode'] %>"
-<% unless @config['tls_san'].empty? -%>
-tls-san:
-<% @config['tls_san'].each do |option| -%>
+<% if @config['datastore_endpoint']-%>
+datastore-endpoint: "<%= @config['datastore_endpoint'] %>"
+<% end -%>
+<% unless @config['disable'].empty? -%>
+disable:
+<% @config['disable'].each do |option| -%>
+  - "<%= option %>"
+<% end -%>
+<% end -%>
+<% if @config['disable_cloud_controller']-%>
+disable-cloud-controller: true
+<% end -%>
+<% unless @config['kubelet_args'].empty? -%>
+kubelet-arg:
+<% @config['kubelet_args'].each do |option| -%>
   - "<%= option %>"
 <% end -%>
 <% end -%>
@@ -11,3 +22,10 @@ node-label:
   - "<%= option %>"
 <% end -%>
 <% end -%>
+<% unless @config['tls_san'].empty? -%>
+tls-san:
+<% @config['tls_san'].each do |option| -%>
+  - "<%= option %>"
+<% end -%>
+<% end -%>
+write-kubeconfig-mode: "<%= @config['write_kubeconfig_mode'] %>"

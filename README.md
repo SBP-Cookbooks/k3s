@@ -21,14 +21,17 @@ default_action :run
 
 #### Properties
 
+* `disable` - Array of components to disable/not deploy.
+* `disable_cloud_controller` - Boolean to disable the default cloud controller manager. Defaults to `false`.
 * `datastore` - Cluster Datastore to use, at the moment only `mariadb` is supported. Defaults to `mariadb`.
 * `kubeconfig_mode` - kube config file mode. Defaults to `0644`.
+* `kubelet_args` - Array of customised flags for the kubelet process.
 * `mariadb_database` - MariaDB database to use. Defaults to `k3s`.
 * `mariadb_user` - MariaDB username used by k3s. Defaults to `k3s`.
 * `mariadb_password` - MariaDB password used by k3s. Defaults to `k3s`.
 * `mariadb_host` - MariaDB host to use. Defaults to `localhost`.
 * `node_labels` - Array of `key=value` pairs to apply as node labels.
-* `tls_san` - TLS SAN(s); can be specified either as an array or string.
+* `tls_san` - Additional TLS SAN(s); can be specified either as an array or string.
 
 #### Examples
 
