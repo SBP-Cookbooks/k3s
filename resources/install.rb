@@ -71,6 +71,7 @@ action :create do
   end
 
   service 'k3s' do
+    subscribes :restart, 'template[/etc/rancher/k3s/config.yaml]', :delayed
     action [:enable, :start]
   end
 end
