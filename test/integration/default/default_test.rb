@@ -5,6 +5,7 @@ datastore-endpoint: "mysql://k3s:k3s@tcp(localhost:3306)/k3s"
 node-label:
   - "foo=bar"
   - "something=amazing"
+snapshotter: "native"
 tls-san:
   - "k3s.example.com"
 write-kubeconfig-mode: "0644"
@@ -51,6 +52,10 @@ control 'k3s health' do
   # Small delay needed for the node to become ready
   describe command('sleep 30; kubectl get nodes') do
     its('exit_status') { should eq 0 }
-    its('stdout') { should match(/#{sys_info.hostname.downcase}\s*Ready\s*master/) }
+    its('stdout') { should match(/#{sys_info.hostname.downcase}\s*Ready/) }
+  end
+
+  describe mysql_session('root', 'gsql').query('SELECT count(*) FROM INFORMATION_SCHEMA.PROCESSLIST WHERE DB = "k3s";') do
+    its('stdout.chomp.to_i') { should be > 0 }
   end
 end
