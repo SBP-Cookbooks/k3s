@@ -28,6 +28,7 @@ property :mariadb_password,         String,          default: 'k3s', sensitive: 
 property :mariadb_user,             String,          default: 'k3s'
 property :mode,                     String,          equal_to: %w(server), name_property: true
 property :node_labels,              Array,           default: []
+property :snapshotter,              String
 property :tls_san,                  [Array, String], default: []
 
 action :create do
@@ -36,6 +37,7 @@ action :create do
   config['disable_cloud_controller'] = new_resource.disable_cloud_controller
   config['kubelet_args'] = new_resource.kubelet_args
   config['node_labels'] = new_resource.node_labels
+  config['snapshotter'] = new_resource.snapshotter
   config['tls_san'] = Array(new_resource.tls_san)
   config['write_kubeconfig_mode'] = new_resource.kubeconfig_mode
 
@@ -57,6 +59,7 @@ action :create do
   template '/etc/rancher/k3s/config.yaml' do
     source 'config.yaml.erb'
     cookbook 'k3s'
+    sensitive true
     variables(config: config)
   end
 

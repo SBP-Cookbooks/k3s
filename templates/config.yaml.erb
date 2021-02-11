@@ -22,6 +22,9 @@ node-label:
   - "<%= option %>"
 <% end -%>
 <% end -%>
+<% if @config['snapshotter'] -%>
+snapshotter: "<%= @config['snapshotter'] %>"
+<% end -%>
 <% unless @config['tls_san'].empty? -%>
 tls-san:
 <% @config['tls_san'].each do |option| -%>

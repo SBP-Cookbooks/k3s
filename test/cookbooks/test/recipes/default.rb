@@ -37,5 +37,6 @@ end
 
 k3s_install 'server' do
   node_labels ['foo=bar', 'something=amazing']
+  snapshotter 'native'
   tls_san 'k3s.example.com'
 end

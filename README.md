@@ -31,6 +31,7 @@ default_action :run
 * `mariadb_password` - MariaDB password used by k3s. Defaults to `k3s`.
 * `mariadb_host` - MariaDB host to use. Defaults to `localhost`.
 * `node_labels` - Array of `key=value` pairs to apply as node labels.
+* `snapshotter` - Set to override the default containerd snapshotter.
 * `tls_san` - Additional TLS SAN(s); can be specified either as an array or string.
 
 #### Examples
